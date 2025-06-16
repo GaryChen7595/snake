@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毒蛇防治教育</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* * =========================================
+         * 基本設定與變數 (Base & Variables)
+         * =========================================
+         */
+        :root {
+            --color-bg-dark: #2c3e50; /* 深藍灰色背景 */
+            --color-bg-light: #34495e; /* 淺藍灰色背景 */
+            --color-card: #ecf0f1;     /* 卡片背景色 */
+            --color-text-dark: #2c3e50; /* 深色文字 */
+            --color-text-light: #ecf0f1; /* 淺色文字 */
+            --color-primary: #3498db;  /* 主題藍色 */
+            --color-success: #2ecc71;  /* 成功/安全色 (綠) */
+            --color-warning: #f1c40f;  /* 警告色 (黃) */
+            --color-danger: #e74c3c;   /* 危險色 (紅) */
+            --font-family-sans: 'Roboto', 'Noto Sans TC', sans-serif;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            --border-radius: 12px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            color: var(--color-text-dark);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            border-left: 5px solid var(--color-primary);
+            padding-left: 10px;
+        }
+
+        section {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        /* * =========================================
+         * 主要容器與海報標頭 (Main Container & Header)
+         * =========================================
+         */
+        .poster-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--color-bg-light);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .poster-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--color-bg-dark), var(--color-bg-light));
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            border: 1px solid var(--color-primary);
+        }
+
+        .poster-header .military-emblem {
+            font-size: 3rem;
+            color: var(--color-warning);
+        }
+
+        .poster-header h1 {
+            color: var(--color-text-light);
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .poster-header .subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            opacity: 0.8;
+        }
+
+        /* * =========================================
+         * 內容網格佈局 (Content Grids)
+         * =========================================
+         */
+        .snakes-grid, .hospitals-grid, .emergency-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .snakes-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .hospitals-grid, .emergency-grid {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* * =========================================
+         * 蛇類卡片樣式 (Snake Card)
+         * =========================================
+         */
+        .snake-card {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .snake-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .snake-card .snake-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .snake-card h3 {
+             margin: 1rem 0 0.5rem;
+        }
+
+        .toxin-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .neurotoxic { background-color: #8e44ad; } /* 神經性 (紫) */
+        .hemorrhagic { background-color: var(--color-danger); } /* 出血性 (紅) */
+        .mixed { background-color: #d35400; } /* 混合性 (橘) */
+
+        .danger-level {
+            font-size: 0.9rem;
+            color: var(--color-text-dark);
+            padding-bottom: 1rem;
+        }
+
+        /* * =========================================
+         * 急救指南樣式 (First Aid Guide)
+         * =========================================
+         */
+        .treatment-guide {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .dos-title { color: var(--color-success); }
+        .donts-title { color: var(--color-danger); }
+
+        .treatment-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        
+        .treatment-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .item-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+
+        .dos-list .item-icon { color: var(--color-success); }
+        .donts-list .item-icon { color: var(--color-danger); }
+        
+        .treatment-item span:last-child {
+            color: var(--color-text-dark);
+        }
+
+        /* * =========================================
+         * 醫院與緊急聯絡卡片 (Hospital & Emergency Cards)
+         * =========================================
+         */
+        .hospital-card, .emergency-card {
+            background: var(--color-card);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .hospital-card h3, .emergency-card h3 {
+             margin-top: 0;
+        }
+
+        .hospital-info .info-item {
+            display: flex;
+            margin-bottom: 0.5rem;
+            color: #34495e;
+        }
+
+        .info-label {
+            font-weight: 700;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .emergency-card {
+            text-align: center;
+        }
+
+        .emergency-icon {
+            font-size: 2.5rem;
+        }
+
+        .phone-large {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin: 0.5rem 0;
+        }
+        
+        .priority-high {
+            border: 3px solid var(--color-danger);
+        }
+
+        .priority-high h3 {
+            color: var(--color-danger);
+        }
+
+        .call-btn {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: background-color 0.3s;
+            margin-top: auto; /* 將按鈕推到底部 */
+        }
+        
+        .call-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .priority-high .call-btn {
+            background-color: var(--color-danger);
+        }
+        .priority-high .call-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* * =========================================
+         * 頁尾樣式 (Footer)
+         * =========================================
+         */
+        .poster-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-bg-light);
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            opacity: 0.7;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        /* * =========================================
+         * 彈出視窗樣式 (Modal)
+         * =========================================
+         */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.7); 
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            animation: slideIn 0.4s ease-out;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-header h2 { margin-bottom: 0; }
+        
+        .modal-body h4 {
+            color: var(--color-primary);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body p {
+            color: var(--color-text-dark);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        /* * =========================================
+         * 響應式設計 (Responsive Design)
+         * =========================================
+         */
+        @media (max-width: 768px) {
+            body { padding: 1rem 0.5rem; }
+            .poster-container { padding: 1rem; }
+            .poster-header h1 { font-size: 1.8rem; }
+            .poster-header .subtitle { font-size: 1rem; }
+            
+            .treatment-guide {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .modal-content {
+                width: 90%;
+                margin: 20% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="poster-container">
+        <!-- Header -->
+        <header class="poster-header">
+            <div class="military-emblem"><img src="https://i.ibb.co/p6TtScZ0/1.png" alt="1" border="0"></a>
+            <h1>毒蛇防治教育</h1>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="content-grid">
+            <!-- Snake Identification Section -->
+            <section class="snake-section">
+                <h2>臺灣六大毒蛇辨識</h2>
+                <div class="snakes-grid">
+                    <div class="snake-card" data-snake="雨傘節">
+                        <div class="snake-image">
+                            <img src="https://i.ibb.co/mCzTnctC/image.jpg" alt="雨傘節" onerror="this.onerror=null;this.src='https://placehold.co/400x300/eee/aaa?text=Image+Not+Found';">
+                        </div>
+                        <h3>雨傘節</h3>
+                        <div class="toxin-badge neurotoxic">神經性毒素</div>
+                        <div class="danger-level">危險度: ★★★★★</div>
+                    </div>
+
+                    <div class="snake-card" data-snake="眼鏡蛇">
+                        <div class="snake-image">
+                            <img src="https://i.ibb.co/wFL81J5Y/image.jpg" alt="眼鏡蛇" onerror="this.onerror=null;this.src='https://placehold.co/400x300/eee/aaa?text=Image+Not+Found';">
+                        </div>
+                        <h3>眼鏡蛇</h3>
+                        <div class="toxin-badge neurotoxic">神經性毒素</div>
+                        <div class="danger-level">危險度: ★★★★☆</div>
+                    </div>
+
+                    <div class="snake-card" data-snake="百步蛇">
+                        <div class="snake-image">
+                            <img src="https://i.ibb.co/zTw3dPfQ/image.jpg"  alt="百步蛇" onerror="this.onerror=null;this.src='https://placehold.co/400x300/eee/aaa?text=Image+Not+Found';">
+                        </div>
+                        <h3>百步蛇</h3>
+                        <div class="toxin-badge hemorrhagic">出血性毒素</div>
+                        <div class="danger-level">危險度: ★★★★★</div>
+                    </div>
+
+                    <div class="snake-card" data-snake="赤尾青竹絲">
+                        <div class="snake-image">
+                            <img src="https://i.ibb.co/8LTSbxZr/image.jpg" alt="赤尾青竹絲" onerror="this.onerror=null;this.src='https://placehold.co/400x300/eee/aaa?text=Image+Not+Found';">
+                        </div>
+                        <h3>赤尾青竹絲</h3>
+                        <div class="toxin-badge hemorrhagic">出血性毒素</div>
+                        <div class="danger-level">危險度: ★★★☆☆</div>
+                    </div>
+
+                    <div class="snake-card" data-snake="龜殼花">
+                        <div class="snake-image">
+                            <img src="https://i.ibb.co/N2WfL1Pr/image.jpg" alt="龜殼花" onerror="this.onerror=null;this.src='https://placehold.co/400x300/eee/aaa?text=Image+Not+Found';">
+                        </div>
+                        <h3>龜殼花</h3>
+                        <div class="toxin-badge hemorrhagic">出血性毒素</div>
+                        <div class="danger-level">危險度: ★★★★☆</div>
+                    </div>
+
+                    <div class="snake-card" data-snake="鎖鏈蛇">
+                        <div class="snake-image">
+                            <img src="https://i.ibb.co/bjcyf2CQ/image.jpg" alt="鎖鏈蛇" onerror="this.onerror=null;this.src='https://placehold.co/400x300/eee/aaa?text=Image+Not+Found';">
+                        </div>
+                        <h3>鎖鏈蛇</h3>
+                        <div class="toxin-badge mixed">混合性毒素</div>
+                        <div class="danger-level">危險度: ★★★★★</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- First Aid Section -->
+            <section class="first-aid-section">
+                <h2>急救處理指南</h2>
+                <div class="treatment-guide">
+                    <div class="dos-section">
+                        <h3 class="dos-title">五要 ✓</h3>
+                        <div class="treatment-list dos-list">
+                            <div class="treatment-item"><span class="item-icon">✓</span><span>要視為毒蛇咬傷處理</span></div>
+                            <div class="treatment-item"><span class="item-icon">✓</span><span>要記毒蛇外觀特徵</span></div>
+                            <div class="treatment-item"><span class="item-icon">✓</span><span>要脫飾品，避免肢體腫脹</span></div>
+                            <div class="treatment-item"><span class="item-icon">✓</span><span>要包傷口上緣，減緩毒液擴散</span></div>
+                            <div class="treatment-item"><span class="item-icon">✓</span><span>要保持冷靜並儘速就醫</span></div>
+                        </div>
+                    </div>
+
+                    <div class="donts-section">
+                        <h3 class="donts-title">五不 ✗</h3>
+                        <div class="treatment-list donts-list">
+                            <div class="treatment-item"><span class="item-icon">✗</span><span>不割開傷口，避免感染</span></div>
+                            <div class="treatment-item"><span class="item-icon">✗</span><span>不用嘴吸出毒液，避免感染</span></div>
+                            <div class="treatment-item"><span class="item-icon">✗</span><span>不冰敷，避免組織壞死</span></div>
+                            <div class="treatment-item"><span class="item-icon">✗</span><span>不飲酒或刺激性飲料</span></div>
+                            <div class="treatment-item"><span class="item-icon">✗</span><span>不延誤就醫，耽誤治療時機</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hospital Information -->
+            <section class="hospital-section">
+                <h2>全臺國軍醫院資訊</h2>
+                <div class="hospitals-grid">
+                    <!-- 北部地區 -->
+                    <div class="hospital-card">
+                        <h3>三軍總醫院內湖院區</h3>
+                        <div class="hospital-info">
+                            <div class="info-item"><span class="info-label">地址:</span><span>台北市內湖區成功路二段325號</span></div>
+                            <div class="info-item"><span class="info-label">電話:</span><span>(02)8792-3311</span></div>
+                            <div class="info-item"><span class="info-label">血清:</span><span>全系列抗蛇毒血清</span></div>
+                        </div>
+                    </div>
+                    <div class="hospital-card">
+                        <h3>三軍總醫院松山分院</h3>
+                        <div class="hospital-info">
+                            <div class="info-item"><span class="info-label">地址:</span><span>台北市松山區健康路131號</span></div>
+                            <div class="info-item"><span class="info-label">電話:</span><span>(02)2764-2151</span></div>
+                            <div class="info-item"><span class="info-label">血清:</span><span>抗神經性、抗龜殼花及赤尾鮐蛇毒血清</span></div>
+                        </div>
+                    </div>
+                     <div class="hospital-card">
+                        <h3>國軍桃園總醫院</h3>
+                        <div class="hospital-info">
+                            <div class="info-item"><span class="info-label">地址:</span><span>桃園市龍潭區中興路168號</span></div>
+                            <div class="info-item"><span class="info-label">電話:</span><span>(03)479-9595</span></div>
+                            <div class="info-item"><span class="info-label">血清:</span><span>全系列抗蛇毒血清</span></div>
+                        </div>
+                    </div>
+                    <div class="hospital-card">
+                        <h3>國軍基隆醫院</h3>
+                        <div class="hospital-info">
+                            <div class="info-item"><span class="info-label">地址:</span><span>基隆市中正區正榮街100號</span></div>
+                            <div class="info-item"><span class="info-label">電話:</span><span>(02)2463-3330</span></div>
+                            <div class="info-item"><span class="info-label">血清:</span><span>抗神經性、抗龜殼花及赤尾鮐蛇毒血清</span></div>
+                        </div>
+                    </div>
+                    <!-- 中部地區 -->
+                    <div class="hospital-card">
+                        <h3>國軍臺中總醫院</h3>
+                        <div class="hospital-info">
+                            <div class="info-item"><span class="info-label">地址:</span><span>台中市太平區中山路二段348號</span></div>
+                            <div class="info-item"><span class="info-label">電話:</span><span>(04)2393-4191</span></div>
+                            <div class="info-item"><span class="info-label">血清:</span><span>全系列抗蛇毒血清</span></div>
+                        </div>
+                    </div>
+                    <!-- 南部地區 -->
+                    <div class="hospital-card">
+                        <h3>國軍高雄總醫院左營分院</h3>
+                        <div class="hospital-info">
+                            <div class="info-item"><span class="info-label">地址:</span><span>高雄市左營區軍校路553號</span></div>
+                            <div class="info-item"><span class="info-label">電話:</span><span>(07)581-7121</span></div>
+                            <div class="info-item"><span class="info-label">血清:</span><span>全系列抗蛇毒血清</span></div>
+                        </div>
+                    </div>
+                    <!-- 東部地區 -->
+                    <div class="hospital-card">
+                        <h3>國軍花蓮總醫院</h3>
+                        <div class="hospital-info">
+                            <div class="info-item"><span class="info-label">地址:</span><span>花蓮縣花蓮市嘉里路163號</span></div>
+                            <div class="info-item"><span class="info-label">電話:</span><span>(03)826-0601</span></div>
+                            <div class="info-item"><span class="info-label">血清:</span><span>全系列抗蛇毒血清</span></div>
+                        </div>
+                    </div>
+                    <!-- 外島地區 -->
+                    <div class="hospital-card">
+                        <h3>三軍總醫院澎湖分院</h3>
+                        <div class="hospital-info">
+                            <div class="info-item"><span class="info-label">地址:</span><span>澎湖縣馬公市前寮里90號</span></div>
+                            <div class="info-item"><span class="info-label">電話:</span><span>(06)921-1116</span></div>
+                            <div class="info-item"><span class="info-label">血清:</span><span>全系列抗蛇毒血清</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Emergency Contacts -->
+            <section class="emergency-section">
+                <h2>緊急聯絡電話</h2>
+                <div class="emergency-grid">
+                    <div class="emergency-card priority-high">
+                        <div class="emergency-icon">🚨</div>
+                        <h3>緊急救護</h3>
+                        <div class="phone-large">119</div>
+                        <button class="call-btn" data-phone="119">立即撥打</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+                   
+
+        <!-- Footer -->
+        <footer class="poster-footer">
+            <div class="footer-content">
+                <div class="creation-info">
+                    <span>製作日期: 陸軍後勤指揮部軍醫處 2025年6月16日 製作</span>
+                </div>
+                <div class="source-info">
+                    <span>資料來源: 衛生福利部疾病管制署、台北榮總、三軍總醫院</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Snake Detail Modal -->
+    <div id="snakeModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <h2 id="modalSnakeName"></h2>
+                <div id="modalToxinType" class="toxin-badge"></div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-features">
+                    <h4>外觀特徵</h4>
+                    <p id="modalFeatures"></p>
+                </div>
+                <div class="modal-symptoms">
+                    <h4>臨床症狀</h4>
+                    <p id="modalSymptoms"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- 蛇類詳細資料 ---
+        const snakeData = {
+            '雨傘節': {
+                toxinType: '神經性毒素',
+                toxinClass: 'neurotoxic',
+                features: '全身為黑白相間的環紋，是台灣陸地上最毒的蛇類。頭部為橢圓形，身體細長。',
+                symptoms: '傷口不太疼痛、不易腫脹，但會出現嗜睡、噁心、嘔吐、頭暈、眼瞼下垂、呼吸困難，嚴重時導致呼吸衰竭。'
+            },
+            '眼鏡蛇': {
+                toxinType: '神經性毒素',
+                toxinClass: 'neurotoxic',
+                features: '受威脅時，頸部會擴張成扁平狀（飯匙倩）。身體通常為褐色或黑色，背部可能有一白色環紋。',
+                symptoms: '傷口劇痛、腫脹、組織壞死。全身症狀與雨傘節類似，但組織壞死更為嚴重。'
+            },
+            '百步蛇': {
+                toxinType: '出血性毒素',
+                toxinClass: 'hemorrhagic',
+                features: '頭部呈明顯三角形，吻端向上翹起。身體兩側有大型的三角形黑棕色斑紋。',
+                symptoms: '傷口劇痛、快速腫脹、出現瘀血及大水泡。可能引發全身性出血、血壓下降、急性腎衰竭等。'
+            },
+            '赤尾青竹絲': {
+                toxinType: '出血性毒素',
+                toxinClass: 'hemorrhagic',
+                features: '全身為鮮綠色，頭部呈三角形，眼睛後方有一條白線。尾巴末端為磚紅色。',
+                symptoms: '傷口腫脹、疼痛、發紺、起水泡。致死率低，但為台灣最常見的毒蛇咬傷元兇。'
+            },
+            '龜殼花': {
+                toxinType: '出血性毒素',
+                toxinClass: 'hemorrhagic',
+                features: '頭呈三角形，身體為黃褐色或棕褐色，背部中央有一系列不規則的暗色斑塊，狀似龜殼花紋。',
+                symptoms: '傷口劇痛、腫脹、起水泡及血泡，可能造成組織壞死、淋巴腺腫大。'
+            },
+            '鎖鏈蛇': {
+                toxinType: '混合性毒素',
+                toxinClass: 'mixed',
+                features: '頭部呈三角形，體色為褐色，身上有一連串橢圓形或鍊狀的深色斑紋。',
+                symptoms: '同時具有出血、神經及凝血異常等多重症狀。傷口劇痛、腫脹，可能導致急性腎衰竭、全身性出血，是極為危險的蛇種。'
+            }
+        };
+
+        // --- 彈出視窗 (Modal) 邏輯 ---
+        const modal = document.getElementById('snakeModal');
+        const snakeCards = document.querySelectorAll('.snake-card');
+        const closeModalBtn = document.querySelector('.modal .close');
+
+        snakeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const snakeName = card.dataset.snake;
+                const data = snakeData[snakeName];
+
+                if (data) {
+                    document.getElementById('modalSnakeName').textContent = snakeName;
+                    document.getElementById('modalFeatures').textContent = data.features;
+                    document.getElementById('modalSymptoms').textContent = data.symptoms;
+                    
+                    const toxinBadge = document.getElementById('modalToxinType');
+                    toxinBadge.textContent = data.toxinType;
+                    toxinBadge.className = 'toxin-badge ' + data.toxinClass; // 重設class
+
+                    modal.style.display = 'block';
+                }
+            });
+        });
+
+        // 關閉 Modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // 點擊 Modal 外部區域也可關閉
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // --- 一鍵撥號按鈕邏輯 ---
+        const callButtons = document.querySelectorAll('.call-btn');
+        callButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                // 阻止事件冒泡，避免觸發其他點擊事件
+                event.stopPropagation(); 
+                
+                const phoneNumber = button.dataset.phone;
+                if (phoneNumber) {
+                    // 使用 location.href 觸發撥號
+                    window.location.href = 'tel:' + phoneNumber;
+                }
+            });
+        });
+
+    });
+    </script>
+</body>
+</html>
